@@ -7,7 +7,7 @@ import Image from 'next/image';
 import React, { useState } from 'react'
 import CoverPicker from '../_components/CoverPicker';
 import coverPics from '../_shared/cover-pics';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, serverTimestamp, orderBy } from 'firebase/firestore';
 import { db } from '@/config/firebaseConfig'
 import { useUser } from '@clerk/nextjs';
 import { useAuth } from '@clerk/clerk-react';
@@ -50,13 +50,14 @@ const CreateWorkspace = (props: Props) => {
 
         const docId= uuid4();
         await setDoc(doc(db,'workspaceDocuments',docId.toString()),{
-            workspaceId:workspaceId,
+            workspaceId:workspaceId.toString(),
             createdBy:user?.primaryEmailAddress?.emailAddress,
             coverImage:null,
             emoji:null,
             id:docId,
             documentName:'Untitled Document',
-            documentOutput:[]
+            documentOutput:[],
+            createdAt: serverTimestamp()
         })
 
         await setDoc(doc(db, 'DocumentOutput', docId.toString()), {

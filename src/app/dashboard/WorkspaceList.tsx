@@ -23,7 +23,7 @@ const WorkspaceList = ({workspaceList}: Props) => {
   }
 
   return (
-    <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6'>
+    <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6'>
     {workspaceList&&workspaceList.map((workspace,index)=>(
         <div key={index} className='border shadow-xl rounded-xl
         hover:scale-105 transition-all cursor-pointer'
