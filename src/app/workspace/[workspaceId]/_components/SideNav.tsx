@@ -5,49 +5,39 @@ import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import uuid4 from "uuid4";
 import { db } from "@/config/firebaseConfig";
-import { collection, orderBy, query, where, doc, setDoc, getDocs, serverTimestamp } from "firebase/firestore";
+import { collection, orderBy, query, where, doc, setDoc, getDocs, serverTimestamp, deleteDoc } from "firebase/firestore";
 import { Button } from "@/components/ui/button";
 import Logo from "@/app/_components/Logo";
 import CreateDocDialogue from "./CreateDocDialogue";
 import { Bell, File } from "lucide-react";
 import DocumentOptions from "./DocumentOptions";
+import Link from "next/link";
+import { Progress } from "@/components/ui/progress";
+import { toast } from 'sonner';
+import { useSearchParams } from 'next/navigation';
+import { Doc } from '@/app/_shared/sharedTypes'
+
 
 type Props = {
   params?: { value?: string };
 };
 
-type Doc = {
-  coverImage?: string;
-  createdBy: string;
-  documentName: string;
-  documentOutput: any[];
-  emoji?: string;
-  id: string;
-  workspaceId: number | string;
-};
+
+// const MAX_FILE=process.env.NEXT_PUBLIC_MAX_FILE_COUNT;
+const MAX_FILE=5;
 
 const SideNav = ({ params }: Props) => {
   const router = useRouter();
   const { user } = useUser();
+  const searchParams = useSearchParams();
+  const workspaceName = searchParams.get('workspaceName');
+  console.log('#### params workspaceName',workspaceName); // "someValue"
 
   const [workspaceId, setWorkspaceId] = useState<string | null>(null);
   const [documentId, setDocumentId] = useState<string | null>(null);
   const [documentList, setDocumentList] = useState<Doc[]>([]);
 
-  // Parse params when available
-//   useEffect(() => {
-//     console.log('#### params', params);
-    
-//     if (params?.value) {
-//       try {
-//         const parsedParams = JSON.parse(params.value);
-//         setWorkspaceId(parsedParams.workspaceId);
-//         setDocumentId(parsedParams.documentId);
-//       } catch (error) {
-//         console.error("Failed to parse params.value:", error);
-//       }
-//     }
-//   }, [params]);
+
 useEffect(() => {
     (async () => {
       try {
@@ -92,11 +82,22 @@ useEffect(() => {
 
   const onDocumentClick = (clickedDocId: string) => {
     if (workspaceId && clickedDocId) {
-      router.replace(`/workspace/${workspaceId}/${clickedDocId}`);
+      router.replace(`/workspace/${workspaceId}/${clickedDocId}?workspaceName=${workspaceName}`);
     }
   };
 
   const onCreateNewDocument = async (docName: string) => {
+    if(documentList?.length>=MAX_FILE) {
+        console.log('Max file exceeded');
+        toast("Upgrade plan to create more",{
+            description: "You reach max file, Please upgrade for unlimited file creation",
+            action: {
+              label: "Upgrade",
+              onClick: () => console.log("Undo"),
+            },
+          })
+        return;
+        }
     if (workspaceId && docName) {
       const docId = uuid4();
       const newDoc = {
@@ -114,32 +115,43 @@ useEffect(() => {
       await setDoc(doc(db, "DocumentOutput", docId), { docId, output: [] });
 
       setDocumentList((prevList: any) => [...prevList, newDoc]);
-      router.replace(`/workspace/${workspaceId}/${docId}`);
+      router.replace(`/workspace/${workspaceId}/${docId}?workspaceName=${workspaceName}`);
     }
   };
 
+  const onDeleteDocument = async (docObj: Doc) => {
+    await deleteDoc(doc(db, "workspaceDocuments", docObj.id));
+    toast(`Doc ${docObj.documentName} deleted from workspace` )
+  }
+
   return (
-    <div className="h-screen md:w-72 fixed bg-primary p-6 shadow-md">
-      <div className="flex justify-between mb-6">
-        <Logo />
+    <div className="h-screen md:w-72 fixed bg-primary shadow-md">
+      <div className="flex justify-between mb-6 p-6">
+        <Link href={'/dashboard'}><Logo/></Link>
         <Bell className="h-5 w-5 mt-2" />
       </div>
       <hr className="mx-2" />
-      <div className="flex justify-between mt-4">
-        <h2 className="font-semibold text-gray-100 mt-1">Workspace Name</h2>
+
+      {/* Workspace Name and create */}
+
+      <div className="flex justify-between mt-4 px-6">
+        <h2 className="font-semibold text-gray-100 mt-1">{workspaceName}</h2>
         <CreateDocDialogue onCreateDocument={onCreateNewDocument}>
           <Button size="sm" variant="secondary">
             +
           </Button>
         </CreateDocDialogue>
       </div>
-      <div className="mt-5">
+
+      {/*  Documents List  */}
+
+      <div className="mt-5 px-6">
         {documentList.length ? (
           documentList.map((doc) => (
             <div
               key={doc.id}
               className={`flex justify-between gap-2 mb-2 p-2 text-white hover:text-black cursor-pointer 
-                ${documentId === doc.id ? "bg-white text-black rounded-lg" : ""}
+                ${documentId === doc.id ? "bg-white text-slate-800 rounded-lg" : ""}
               `}
               onClick={() => onDocumentClick(doc.id)}
             >
@@ -147,7 +159,7 @@ useEffect(() => {
                     <File />
                     <h2>{doc.documentName}</h2>
                 </div>
-                <DocumentOptions />
+                <DocumentOptions docDetails={doc} deleteDocument={onDeleteDocument}/>
             </div>
           ))
         ) : (
@@ -156,6 +168,16 @@ useEffect(() => {
           </div>
         )}
       </div>
+
+
+      {/* Progress Bar  */}
+
+      <div className='absolute bottom-10  bg-white px-6 py-4 mx-4 rounded-lg'>
+        <Progress className=" text-yellow-200" value={(documentList?.length/MAX_FILE)*100} />
+        <h2 className='text-sm font-light my-2'><strong>{documentList?.length}</strong> Out of <strong>5</strong> files used</h2>
+        <h2 className='text-sm font-light '>Upgrade your plan for unlimted access</h2>
+       
+        </div>
     </div>
   );
 };

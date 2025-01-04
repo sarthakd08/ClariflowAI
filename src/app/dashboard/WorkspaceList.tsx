@@ -18,8 +18,9 @@ type Workspace = {
 
 const WorkspaceList = ({workspaceList}: Props) => {
   const router=useRouter();
-  const OnClickWorkspaceItem=(workspaceId: string)=>{
-      router.push('/workspace/'+workspaceId)
+  const OnClickWorkspaceItem=(workspace: Workspace)=>{
+      // router.push('/workspace/'+workspaceId)
+      router.push(`/workspace/${workspace.id}?workspaceName=${workspace.workspaceName}`)
   }
 
   return (
@@ -27,7 +28,7 @@ const WorkspaceList = ({workspaceList}: Props) => {
     {workspaceList&&workspaceList.map((workspace,index)=>(
         <div key={index} className='border shadow-xl rounded-xl
         hover:scale-105 transition-all cursor-pointer'
-        onClick={()=>OnClickWorkspaceItem(workspace.id)}
+        onClick={()=>OnClickWorkspaceItem(workspace)}
         >
             <Image src={workspace?.workspaceCoverImage} 
             width={400} height={200} alt='cover'

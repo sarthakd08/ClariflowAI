@@ -48,26 +48,27 @@ const CreateWorkspace = (props: Props) => {
             orgId: orgId ? orgId : user?.primaryEmailAddress?.emailAddress
         })
 
-        const docId= uuid4();
-        await setDoc(doc(db,'workspaceDocuments',docId.toString()),{
-            workspaceId:workspaceId.toString(),
-            createdBy:user?.primaryEmailAddress?.emailAddress,
-            coverImage:null,
-            emoji:null,
-            id:docId,
-            documentName:'Untitled Document',
-            documentOutput:[],
-            createdAt: serverTimestamp()
-        })
+        // const docId= uuid4();
+        // await setDoc(doc(db,'workspaceDocuments',docId.toString()),{
+        //     workspaceId:workspaceId.toString(),
+        //     createdBy:user?.primaryEmailAddress?.emailAddress,
+        //     coverImage:null,
+        //     emoji:null,
+        //     id:docId,
+        //     documentName:'Untitled Document',
+        //     documentOutput:[],
+        //     createdAt: serverTimestamp()
+        // })
 
-        await setDoc(doc(db, 'DocumentOutput', docId.toString()), {
-            docId: docId,
-            output: []
-        })
+        // await setDoc(doc(db, 'DocumentOutput', docId.toString()), {
+        //     docId: docId,
+        //     output: []
+        // })
 
         console.log('Data Inserted in 3 collections susscessfully!')
         setLoading(false);
-        router.replace('/workspace/'+workspaceId+'/'+docId)
+        router.replace(`/workspace/${workspaceId}?workspaceName=${workspaceName}`)
+        // router.replace('/workspace/'+workspaceId+'/'+docId)
     }
 
   return (
