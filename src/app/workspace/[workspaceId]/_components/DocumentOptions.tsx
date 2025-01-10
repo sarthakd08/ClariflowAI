@@ -33,7 +33,7 @@ const DocumentOptions = ({docDetails, deleteDocument}: Props) => {
         
         <DropdownMenu>
         <DropdownMenuTrigger>
-            <MoreVertical className='h-4 w-4'/>
+            <MoreVertical className='h-4 w-4 text-black'/>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
             

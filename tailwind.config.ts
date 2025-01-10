@@ -22,10 +22,13 @@ export default {
   			},
   			primary: {
   				DEFAULT: '#F26B38',
+				//   DEFAULT: '#F26B38'
   				foreground: 'hsl(var(--primary-foreground))'
   			},
   			secondary: {
-  				DEFAULT: 'hsl(var(--secondary))',
+
+  				DEFAULT: '#ECEFF1',
+  				// DEFAULT: 'hsl(var(--secondary))',
   				foreground: 'hsl(var(--secondary-foreground))'
   			},
   			muted: {

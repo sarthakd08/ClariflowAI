@@ -49,7 +49,7 @@ const CreateDocDialogue = ({children, onCreateDocument}: Props) => {
                   Close
                 </Button>
               </DialogClose>
-              <DialogClose asChild>
+              <DialogClose asChild className='mb-2'>
                 <Button 
                     type="button"
                     disabled={!docName || docName?.length < 3}
