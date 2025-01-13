@@ -25,8 +25,10 @@ const WorkSpace = ({params}: Props) => {
   return (
     <div>
         {/* Sidenav */}
+        <div>
             <SideNav params={params} />
-        
+        </div>
+
         {/* document here */}
         <div className='md:ml-72'>
            Select a Document to Show its Content here

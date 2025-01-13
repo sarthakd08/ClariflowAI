@@ -26,21 +26,19 @@ const WorkspaceDocumentDetails = ({ params }: Props) => {
         {isNavOpen ? '' : <Menu className="w-6 h-6" />}
       </button>
 
-      {/* Side Navigation */}
+      {/* Side Navigation (Always Fixed on Mobile and Laptop) */}
       <div
-        className={`fixed inset-y-0 left-0 bg-white shadow-lg transform transition-transform duration-300 z-40 w-52 md:static md:translate-x-0 md:block md:w-72 ${
-          isNavOpen ? "block" : "hidden"}
-
-          `}
+        className={`fixed inset-y-0 left-0 bg-white shadow-lg transform transition-transform duration-300 z-40 w-52  md:translate-x-0 md:block md:w-72 md:fixed ${
+          isNavOpen ? "block" : "hidden"} top-0 bottom-0 h-screen`}
       >
-        <SideNav params={params} isNavOpen={isNavOpen} toggleNav={toggleNav}/>
+        <div className="h-full overflow-y-auto">
+          <SideNav params={params} isNavOpen={isNavOpen} toggleNav={toggleNav} />
+        </div>
       </div>
 
       {/* Main Content */}
-      <div className="flex-1">
-        <div>
-          <DocumentEditorSection params={params} />
-        </div>
+      <div className="flex-1 overflow-auto md:ml-72">
+        <DocumentEditorSection params={params} />
       </div>
     </div>
   );

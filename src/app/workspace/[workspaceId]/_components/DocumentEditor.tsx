@@ -14,6 +14,7 @@ import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '@/config/firebaseConfig';
 import { useUser } from '@clerk/nextjs';
 import { Doc } from '@/app/_shared/sharedTypes';
+import GenerateAITemplate from './GenerateAITemplate';
 
 type Props = {
     documentInfo: Doc
@@ -141,11 +142,19 @@ const saveDocument = () => {
     }
   };
   
-  
+  const setTheAIGeneratedOutput = (output: any) => {
+    if(output) {
+      ref.current?.render(output);
+    }
+  }
 
   return (
     <div>
       <div id="editorjs"></div>
+
+      <div className='fixed bottom-10 md:ml-80 right-4 md:right-16 z-10'>
+          <GenerateAITemplate setTheAIGeneratedOutput={setTheAIGeneratedOutput}/>
+      </div>
     </div>
   );
 };

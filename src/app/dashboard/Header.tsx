@@ -1,15 +1,38 @@
 "use client"
 
-import { OrganizationSwitcher, UserButton, useAuth } from '@clerk/nextjs'
-import React from 'react'
+import { OrganizationSwitcher, UserButton, useAuth, useUser } from '@clerk/nextjs'
+import React, { useEffect } from 'react'
 import Logo from '../_components/Logo'
 import Link from 'next/link'
+import { doc, setDoc } from 'firebase/firestore'
+import { db } from '@/config/firebaseConfig'
 
 type Props = {}
 
 const Header = (props: Props) => {
   const {orgId} = useAuth();
+  const {user} = useUser()
   console.log('## orgId', orgId);
+
+  useEffect(() => {
+    user && saveUserDataToDB()
+  }, [user])
+
+  // Saving a new user to DB
+  const saveUserDataToDB = async () => {
+    const id = user?.primaryEmailAddress?.emailAddress
+    try {
+      if(id){
+        await setDoc( doc(db, 'Users', id), {
+          name: user?.fullName,
+          avatar: user?.imageUrl,
+          email: user?.primaryEmailAddress?.emailAddress
+        })
+      }
+    } catch (error) {
+      
+    }
+  }
   
   return (
     <>

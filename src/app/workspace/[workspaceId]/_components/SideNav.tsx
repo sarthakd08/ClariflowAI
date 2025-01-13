@@ -9,7 +9,7 @@ import { collection, orderBy, query, where, doc, setDoc, getDocs, serverTimestam
 import { Button } from "@/components/ui/button";
 import Logo from "@/app/_components/Logo";
 import CreateDocDialogue from "./CreateDocDialogue";
-import { Bell, File, X } from "lucide-react";
+import { Bell, File, Plus, X } from "lucide-react";
 import DocumentOptions from "./DocumentOptions";
 import Link from "next/link";
 import { Progress } from "@/components/ui/progress";
@@ -20,8 +20,8 @@ import { Doc } from '@/app/_shared/sharedTypes'
 
 type Props = {
   params?: { [value:string]: any };
-  isNavOpen: boolean
-  toggleNav: () => void
+  isNavOpen?: boolean
+  toggleNav?: () => void
 };
 
 
@@ -143,8 +143,8 @@ useEffect(() => {
       <div className="flex justify-between mt-8 mb-8 px-6 md:mt-6">
         <h2 className="font-semibold text-primary mt-1 text-sm md:text-lg">{workspaceName}</h2>
         <CreateDocDialogue onCreateDocument={onCreateNewDocument}>
-          <Button size="sm" variant="secondary">
-            +
+          <Button size="sm" variant={'default'}>
+            <Plus className="w-4 h-4"/>
           </Button>
         </CreateDocDialogue>
       </div>
