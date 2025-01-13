@@ -30,6 +30,7 @@ const Header = (props: Props) => {
         })
       }
     } catch (error) {
+      console.error('Unable to save user in firebase DB');
       
     }
   }
