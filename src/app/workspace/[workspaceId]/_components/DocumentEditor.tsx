@@ -15,6 +15,10 @@ import { db } from '@/config/firebaseConfig';
 import { useUser } from '@clerk/nextjs';
 import { Doc } from '@/app/_shared/sharedTypes';
 import GenerateAITemplate from './GenerateAITemplate';
+import { Room } from '@/app/Room';
+import { Button } from '@/components/ui/button';
+import { CommentBox } from './CommentBox';
+import { MessageCircle, X } from 'lucide-react';
 
 type Props = {
     documentInfo: Doc
@@ -25,6 +29,7 @@ const DocumentEditor = ({documentInfo}: Props) => {
   const docDetailsRef = useRef<Doc | null>(null);
   const { user } = useUser();
   let isFetched = false // Flag to track if Current Document data has been fetched once on load
+  const [openComment, setOpenComment] = useState<boolean>(false)
 
   useEffect(() => {
     initEditor();
@@ -152,9 +157,15 @@ const saveDocument = () => {
     <div>
       <div id="editorjs"></div>
 
-      <div className='fixed bottom-10 md:ml-80 right-4 md:right-16 z-10'>
+      <div className='fixed bottom-10 md:ml-80 right-4 md:right-10 z-10'>
           <GenerateAITemplate setTheAIGeneratedOutput={setTheAIGeneratedOutput}/>
       </div>
+      {/* <div className='fixed right-10 bottom-24 z-50'>
+          <Room>
+              <Button className='cursor-pointer' onClick={() => setOpenComment(!openComment)}>{openComment ? <X /> :<MessageCircle />}</Button>
+              {openComment && <CommentBox />}
+          </Room>
+      </div> */}
     </div>
   );
 };

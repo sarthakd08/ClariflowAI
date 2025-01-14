@@ -9,6 +9,7 @@ import {
   UserButton
 } from '@clerk/nextjs'
 import { Toaster } from "@/components/ui/sonner";
+import "@liveblocks/react-ui/styles.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

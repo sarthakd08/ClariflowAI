@@ -13,10 +13,8 @@ export default function Home() {
 
   // Redirect to dashboard if the user is signed in
   useEffect(() => {
-    console.log('11111');
     
     if (isLoaded && user) {
-      console.log('222222');
       router.push('/dashboard');
     }
   }, [isLoaded, user, router]);
@@ -33,7 +31,7 @@ export default function Home() {
           priority
         /> */}
 
-        <LoaderCircle className="text-primary h-8 w-8"/>
+        <LoaderCircle className="text-primary h-16 w-16 animate-spin"/>
       </main>
     </div>
   );

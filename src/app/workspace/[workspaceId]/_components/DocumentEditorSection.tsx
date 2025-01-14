@@ -6,6 +6,10 @@ import { usePathname } from 'next/navigation';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/config/firebaseConfig';
 import DocumentEditor from './DocumentEditor';
+import { Room } from '@/app/Room';
+import { Button } from '@/components/ui/button';
+import { ArrowDown, ArrowDown01Icon, Cross, CrossIcon, MessageCircle, X } from 'lucide-react';
+import { CommentBox } from './CommentBox';
 
 type Props = {
     params: any
@@ -16,6 +20,7 @@ const DocumentEditorSection = ({params}: Props) => {
     const id = pathname.split('/').pop();
 
     const [documentInfo, setDocumentInfo] = useState<any>({})
+    const [openComment, setOpenComment] = useState<boolean>(false)
 useEffect(() => {
     if(id) {
         getDocumentInfo(id)
@@ -36,18 +41,29 @@ const getDocumentInfo = async (docId: string) => {
 
   return (
     <div>
+        
         {/* Header */}
         <DocumentHeader />
-
         
         {documentInfo && (
             <>
                 <DocumentInfo documentInfo={documentInfo} />
-                <div className='p-4 lg:-ml-40 md:p-0'>
-                    <DocumentEditor documentInfo={documentInfo} />
+                <div className='md:grid md:grid-cols-5'>
+
+                    <div className='p-4 lg:-ml-40 md:p-0 md:col-span-4'>
+                        <DocumentEditor documentInfo={documentInfo} />
+                    </div>
+                    <div className='fixed right-10 bottom-24'>
+                        <Room>
+                            <Button className='cursor-pointer' onClick={() => setOpenComment(!openComment)}>{openComment ? <X /> :<MessageCircle />}</Button>
+                            {openComment && <CommentBox />}
+                        </Room>
+                    </div>
                 </div>
+
             </>
         )}
+    
     </div>
   )
 }
