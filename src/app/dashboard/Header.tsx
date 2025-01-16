@@ -37,7 +37,7 @@ const Header = (props: Props) => {
   
   return (
     <>
-        <div className='flex justify-between items-center shadow-sm p-4 sm:px-10 md:px-12  lg:px-16'>
+        <div className=' bg-white flex justify-between items-center shadow-sm p-4 sm:px-10 md:px-12  lg:px-16'>
         <Link href={'/dashboard'}><Logo /></Link>
           <OrganizationSwitcher />
           <UserButton />
