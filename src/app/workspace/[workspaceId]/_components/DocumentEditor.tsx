@@ -58,7 +58,7 @@ useEffect(() => {
             console.log('### current Doc Detailsss output', docSnap.data());
             if(docSnap.data()?.editedBy !== user?.primaryEmailAddress?.emailAddress || !isFetched) {
                 console.log('#### Inside ');
-                docSnap.data()?.editedBy && ref.current?.render(JSON.parse(docSnap.data()?.output)); 
+                if(docSnap.data()?.editedBy) ref.current?.render(JSON.parse(docSnap.data()?.output)); 
                 isFetched = true;
             }
             
@@ -126,7 +126,7 @@ const saveDocument = () => {
           paragraph: Paragraph,
           table: Table,
           list: {
-            class: List as unknown as BlockTool, // Cast to resolve type issue
+            class: List as unknown as EditorJS.ToolConstructable, // Adjusted casting to ToolConstructable
             inlineToolbar: true,
             shortcut: 'CMD+SHIFT+L',
             config: {

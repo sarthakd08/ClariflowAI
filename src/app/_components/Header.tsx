@@ -1,6 +1,7 @@
 import React from 'react'
 import Logo from './Logo'
 import { UserButton } from '@clerk/nextjs'
+import Link from 'next/link'
 
 function Header({userInfo}: {userInfo: any}) {
   return (
@@ -10,9 +11,9 @@ function Header({userInfo}: {userInfo: any}) {
             <div className="flex flex-wrap items-center justify-between py-2 gap-6 md:py-4 md:gap-0 relative">
                 <input aria-hidden="true" type="checkbox" name="toggle_nav" id="toggle_nav" className="hidden peer"/>
                 <div className="relative z-20 w-full flex justify-between lg:w-max md:px-0">
-                    {/* <a href="/dashboard" aria-label="logo" className="flex space-x-2 items-center"> */}
+                    {/* <Link href="/dashboard" aria-label="logo" className="flex space-x-2 items-center"> */}
                         <Logo/>
-                    {/* </a> */}
+                    {/* </Link> */}
                     
                     <div className="relative flex items-center lg:hidden max-h-10">
                         <label role="button" htmlFor="toggle_nav" aria-label="humburger" id="hamburger" className="relative  p-6 -mr-6">
@@ -33,16 +34,16 @@ function Header({userInfo}: {userInfo: any}) {
                                 <UserButton />
                                 :    
                                 <li>
-                                    <a href="/sign-in" className="block md:px-4 transition hover:text-primary">
+                                    <Link href="/sign-in" className="block md:px-4 transition hover:text-primary">
                                         <span>Sign in</span>
-                                    </a>
+                                    </Link>
                                 </li>
                             }
                         </ul>
                     </div>
 
                     <div className="mt-12 lg:mt-0">
-                        <a
+                        <Link
                             href="/dashboard"
                             className="relative flex h-9 w-full items-center justify-center px-4 before:absolute before:inset-0 before:rounded-full before:bg-primary before:transition 
                             before:duration-300 hover:before:scale-105 
@@ -50,7 +51,7 @@ function Header({userInfo}: {userInfo: any}) {
                             >
                             <span className="relative text-sm font-semibold text-white"
                                 >{userInfo?.id ? 'Go to Dashboard': 'Get Started'}</span>
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </div>

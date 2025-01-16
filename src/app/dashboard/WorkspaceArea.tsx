@@ -29,7 +29,7 @@ const WorkspaceArea = (props: Props) => {
 
     useEffect(() => {
         // setWorkspaceList([{id: 1, name: 'Dev Workspace'}, {id: 2, name: 'QA Workspace'}])
-        user && getWorkspaceList()
+        if(user) getWorkspaceList()
     }, [user, orgId])
 
     const getWorkspaceList = async () => {

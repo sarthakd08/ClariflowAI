@@ -1,5 +1,5 @@
 
-export default [
+const coverPics =  [
     {
         imageUrl:'https://img.freepik.com/free-photo/abstract-flame-shapes-flowing-vibrant-blue-yellow-colors-generated-by-artificial-intelligence_188544-84559.jpg?ga=GA1.1.1679917421.1705195646&semt=ais_user_ai_gen'
     },
@@ -55,3 +55,5 @@ export default [
         imageUrl: '/ws_header5.jpg'
     },
 ]
+
+export default coverPics;

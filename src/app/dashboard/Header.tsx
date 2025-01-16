@@ -15,7 +15,7 @@ const Header = (props: Props) => {
   console.log('## orgId', orgId);
 
   useEffect(() => {
-    user && saveUserDataToDB()
+    if(user) saveUserDataToDB()
   }, [user])
 
   // Saving a new user to DB
