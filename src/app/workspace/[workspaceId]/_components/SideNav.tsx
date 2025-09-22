@@ -15,7 +15,8 @@ import Link from "next/link";
 import { Progress } from "@/components/ui/progress";
 import { toast } from 'sonner';
 import { useSearchParams } from 'next/navigation';
-import { Doc } from '@/app/_shared/sharedTypes'
+import { Doc } from '@/app/_shared/sharedTypes';
+import { ThemeToggle } from '@/components/theme-toggle'
 
 
 type Props = {
@@ -55,29 +56,32 @@ useEffect(() => {
   }, [params]);
 
   // Fetch documents when workspaceId changes
-  useEffect( () => {
-      let unsubscribe: any;
+  useEffect(() => {
     if (workspaceId) {
         console.log('##### workspaceId useeffect', workspaceId);
         setDocumentList([]);
-        v();
+        fetchDocuments();
     }
 
-    async function v () {
-        const q = query(
-            collection(db, "workspaceDocuments"),
-            where("workspaceId", "==", workspaceId?.toString()),
-            orderBy("createdAt", "desc")
-        );
-        console.log('##### query', q);
-        // setDocumentList([]);
-        const querySnapshot = await getDocs(q);
+    async function fetchDocuments() {
+        try {
+            const q = query(
+                collection(db, "workspaceDocuments"),
+                where("workspaceId", "==", workspaceId?.toString()),
+                orderBy("createdAt", "desc")
+            );
+            console.log('##### query', q);
+            const querySnapshot = await getDocs(q);
             
-        querySnapshot.forEach((doc) => {
-            console.log('##### doc.data', doc.data());
-            setDocumentList((prev: any) => [...prev, doc.data()])
-            // setDocumentList(docs);
-        });
+            const docs: Doc[] = [];
+            querySnapshot.forEach((doc) => {
+                console.log('##### doc.data', doc.data());
+                docs.push(doc.data() as Doc);
+            });
+            setDocumentList(docs);
+        } catch (error) {
+            console.error('Error fetching documents:', error);
+        }
     }
 
   }, [workspaceId]);
@@ -122,26 +126,39 @@ useEffect(() => {
   };
 
   const onDeleteDocument = async (docObj: Doc) => {
-    await deleteDoc(doc(db, "workspaceDocuments", docObj.id));
-    toast(`Doc ${docObj.documentName} deleted from workspace` )
+    try {
+      await deleteDoc(doc(db, "workspaceDocuments", docObj.id));
+      await deleteDoc(doc(db, "DocumentOutput", docObj.id));
+      
+      // Remove from local state
+      setDocumentList(prev => prev.filter(doc => doc.id !== docObj.id));
+      
+      toast(`Doc ${docObj.documentName} deleted from workspace`);
+    } catch (error) {
+      console.error('Error deleting document:', error);
+      toast(`Error deleting ${docObj.documentName}`);
+    }
   }
 
 //   if(!isNavOpen) return null
   return (
-    <div className="h-screen md:w-72 fixed bg-secondary shadow-md">
+    <div className="h-screen md:w-72 fixed bg-secondary dark:bg-gray-900 shadow-md dark:shadow-gray-700">
       <div className="flex justify-between p-4 gap-2 md:mb-6 md:p-6">
         <Link href={'/dashboard'}><Logo/></Link>
-        <Bell className="h-5 w-5 mt-2" />
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          <Bell className="h-5 w-5 text-gray-600 dark:text-gray-300" />
+        </div>
       </div>
-      <div  className={`absolute right-4 w-6 h-6 md:hidden bg-gray-200 rounded-full shadow`} onClick={toggleNav}>
-        <X  />
+      <div  className={`absolute right-4 w-6 h-6 md:hidden bg-gray-200 dark:bg-gray-700 rounded-full shadow`} onClick={toggleNav}>
+        <X className="text-gray-600 dark:text-gray-300" />
       </div>
-      <hr className="mx-2" />
+      <hr className="mx-2 border-gray-300 dark:border-gray-600" />
 
       {/* Workspace Name and create */}
 
       <div className="flex justify-between mt-8 mb-8 px-6 md:mt-6">
-        <h2 className="font-semibold text-primary mt-1 text-sm md:text-lg">{workspaceName}</h2>
+        <h2 className="font-semibold text-primary dark:text-orange-400 mt-1 text-sm md:text-lg">{workspaceName}</h2>
         <CreateDocDialogue onCreateDocument={onCreateNewDocument}>
           <Button size="sm" variant={'default'}>
             <Plus className="w-4 h-4"/>
@@ -156,21 +173,21 @@ useEffect(() => {
           documentList.map((doc) => (
             <div
               key={doc.id}
-              className={`flex justify-between gap-2 mb-2 p-2 text-white text-sm hover:text-black cursor-pointer font-mono font-semibold
-                ${documentId === doc.id ? " bg-white rounded-lg" : ""}
+              className={`flex justify-between gap-2 mb-2 p-2 text-gray-700 dark:text-gray-300 text-sm hover:text-black dark:hover:text-white cursor-pointer font-mono font-semibold transition-colors
+                ${documentId === doc.id ? " bg-white dark:bg-gray-700 rounded-lg shadow-sm" : "hover:bg-gray-100 dark:hover:bg-gray-800"}
               `}
               onClick={() => onDocumentClick(doc.id)}
             >
                 <div className="flex justify-start gap-2 text-sm">
-                    <File className={` text-primary`} /> 
-                    <h2 className={`text-primary`}>{doc.documentName}</h2>
+                    <File className={`text-primary dark:text-orange-400`} /> 
+                    <h2 className={`text-primary dark:text-orange-400`}>{doc.documentName}</h2>
                 </div>
                 <DocumentOptions docDetails={doc} deleteDocument={onDeleteDocument}/>
             </div>
           ))
         ) : (
           <div className="text-center">
-            <h3 className="mt-10 lg:p-3 text-primary">Start creating pretty documents!</h3>
+            <h3 className="mt-10 lg:p-3 text-primary dark:text-orange-400">Start creating pretty documents!</h3>
           </div>
         )}
       </div>
@@ -178,10 +195,10 @@ useEffect(() => {
 
       {/* Progress Bar  */}
 
-      <div className='absolute bottom-10  bg-white px-6 py-4 mx-4 rounded-lg'>
+      <div className='absolute bottom-10 bg-white dark:bg-gray-800 px-6 py-4 mx-4 rounded-lg shadow-lg dark:shadow-gray-900'>
         <Progress className=" text-yellow-200" value={(documentList?.length/MAX_FILE)*100} />
-        <h2 className='text-sm font-light my-2'><strong>{documentList?.length}</strong> Out of <strong>5</strong> files used</h2>
-        <h2 className='text-sm font-light '>Upgrade your plan for unlimted access</h2>
+        <h2 className='text-sm font-light my-2 text-gray-700 dark:text-gray-300'><strong>{documentList?.length}</strong> Out of <strong>5</strong> files used</h2>
+        <h2 className='text-sm font-light text-gray-600 dark:text-gray-400'>Upgrade your plan for unlimited access</h2>
        
         </div>
     </div>

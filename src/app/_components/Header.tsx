@@ -2,6 +2,7 @@ import React from 'react'
 import Logo from './Logo'
 import { UserButton } from '@clerk/nextjs'
 import Link from 'next/link'
+import { ThemeToggle } from '@/components/theme-toggle'
 
 function Header({userInfo}: {userInfo: any}) {
   return (
@@ -30,15 +31,16 @@ function Header({userInfo}: {userInfo: any}) {
                    
                     <div className="text-gray-600 dark:text-gray-300 lg:pr-4 lg:w-auto w-full lg:pt-0">
                         <ul className="tracking-wide font-medium lg:text-sm flex-col flex lg:flex-row gap-6 lg:gap-0">
-                            {userInfo?.id ? 
-                                <UserButton />
-                                :    
-                                <li>
+                            <li className="flex items-center gap-4">
+                                <ThemeToggle />
+                                {userInfo?.id ? 
+                                    <UserButton />
+                                    :    
                                     <Link href="/sign-in" className="block md:px-4 transition hover:text-primary">
                                         <span>Sign in</span>
                                     </Link>
-                                </li>
-                            }
+                                }
+                            </li>
                         </ul>
                     </div>
 

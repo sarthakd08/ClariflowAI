@@ -36,6 +36,7 @@ const GenerateAITemplate = ({setTheAIGeneratedOutput}: Props) => {
             setTheAIGeneratedOutput(output);
             setUserInput('')
         } catch (error) {
+            console.error('Error generating AI template:', error);
             setLoading(false);
             setUserInput('')
         }

@@ -28,7 +28,7 @@ const DocumentEditor = ({documentInfo}: Props) => {
   const ref = useRef<EditorJS | null>(null);
   const docDetailsRef = useRef<Doc | null>(null);
   const { user } = useUser();
-  let isFetched = false // Flag to track if Current Document data has been fetched once on load
+  const [isFetched, setIsFetched] = useState(false) // Flag to track if Current Document data has been fetched once on load
   const [openComment, setOpenComment] = useState<boolean>(false)
 
   useEffect(() => {
@@ -46,7 +46,7 @@ useEffect(() => {
     if(docDetailsRef.current) {
         getDocumentDetails()
     }
-  }, [documentInfo]);
+  }, [documentInfo, user, isFetched]);
 
 
     const getDocumentDetails = async () => {
@@ -58,8 +58,14 @@ useEffect(() => {
             console.log('### current Doc Detailsss output', docSnap.data());
             if(docSnap.data()?.editedBy !== user?.primaryEmailAddress?.emailAddress || !isFetched) {
                 console.log('#### Inside ');
-                if(docSnap.data()?.editedBy) ref.current?.render(JSON.parse(docSnap.data()?.output)); 
-                isFetched = true;
+                if(docSnap.data()?.editedBy) {
+                    try {
+                        ref.current?.render(JSON.parse(docSnap.data()?.output));
+                    } catch (error) {
+                        console.error('Error parsing document output:', error);
+                    }
+                }
+                setIsFetched(true);
             }
             
         }

@@ -9,6 +9,7 @@ import {
   UserButton
 } from '@clerk/nextjs'
 import { Toaster } from "@/components/ui/sonner";
+import { ThemeProvider } from "@/components/theme-provider";
 import "@liveblocks/react-ui/styles.css";
 
 const geistSans = Geist({
@@ -38,10 +39,17 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en">
+      <html lang="en" suppressHydrationWarning>
         <body  className={`${outfit.variable} ${outfit.variable} antialiased`}>
-          <Toaster />
-          {children}
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Toaster />
+            {children}
+          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>

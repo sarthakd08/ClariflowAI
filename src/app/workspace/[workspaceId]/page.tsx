@@ -30,8 +30,10 @@ const WorkSpace = ({params}: Props) => {
         </div>
 
         {/* document here */}
-        <div className='md:ml-72'>
-           Select a Document to Show its Content here
+        <div className='md:ml-72 flex justify-center items-center h-screen bg-gray-50 dark:bg-gray-900'>
+           <h3 className='text-md text-gray-600 dark:text-gray-300'>Select or Create a document to open its content here</h3>
+           {/* <Image src={'/workspace.png'} alt='workspace' width={250} height={250}/> */}
+           {/* <Image src={'/workspace.jpeg'} alt='cover' width={300} height={300}/> */}
             {/* <div className='p-10 my-10 flex flex-col items-center justify-center'>
                 <Image src={'/workspace.png'} alt='workspace' width={250} height={250}/>
                 <CreateDocDialogue onCreateDocument={onCreateNewDocument}>

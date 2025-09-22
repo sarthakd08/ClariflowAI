@@ -6,6 +6,7 @@ import Logo from '../_components/Logo'
 import Link from 'next/link'
 import { doc, setDoc } from 'firebase/firestore'
 import { db } from '@/config/firebaseConfig'
+import { ThemeToggle } from '@/components/theme-toggle'
 
 type Props = {}
 
@@ -37,10 +38,13 @@ const Header = (props: Props) => {
   
   return (
     <>
-        <div className=' bg-white flex justify-between items-center shadow-sm p-4 sm:px-10 md:px-12  lg:px-16'>
+        <div className=' bg-white dark:bg-gray-900 flex justify-between items-center shadow-sm p-4 sm:px-10 md:px-12  lg:px-16'>
         <Link href={'/dashboard'}><Logo /></Link>
-          <OrganizationSwitcher />
-          <UserButton />
+          <div className="flex items-center gap-4">
+            <OrganizationSwitcher />
+            <ThemeToggle />
+            <UserButton />
+          </div>
         </div>
     </>
   )

@@ -4,7 +4,14 @@ const nextConfig: NextConfig = {
   /* config options here */
   reactStrictMode: false,
   images: {
-    domains: ['img.freepik.com']
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'img.freepik.com',
+        port: '',
+        pathname: '/**',
+      },
+    ],
   }
 };
 
