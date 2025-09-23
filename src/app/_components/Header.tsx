@@ -13,7 +13,7 @@ function Header({userInfo}: {userInfo: any}) {
                 <input aria-hidden="true" type="checkbox" name="toggle_nav" id="toggle_nav" className="hidden peer"/>
                 <div className="relative z-20 w-full flex justify-between lg:w-max md:px-0">
                     {/* <Link href="/dashboard" aria-label="logo" className="flex space-x-2 items-center"> */}
-                        <Logo/>
+                        <Logo size="md" />
                     {/* </Link> */}
                     
                     <div className="relative flex items-center lg:hidden max-h-10">

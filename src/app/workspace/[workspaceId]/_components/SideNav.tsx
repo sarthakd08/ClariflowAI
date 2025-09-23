@@ -144,7 +144,7 @@ useEffect(() => {
   return (
     <div className="h-screen md:w-72 fixed bg-secondary dark:bg-gray-900 shadow-md dark:shadow-gray-700">
       <div className="flex justify-between p-4 gap-2 md:mb-6 md:p-6">
-        <Link href={'/dashboard'}><Logo/></Link>
+        <Link href={'/dashboard'}><Logo size="sm" variant="background" /></Link>
         <div className="flex items-center gap-2">
           <ThemeToggle />
           <Bell className="h-5 w-5 text-gray-600 dark:text-gray-300" />

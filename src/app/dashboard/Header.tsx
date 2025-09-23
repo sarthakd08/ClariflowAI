@@ -39,7 +39,7 @@ const Header = (props: Props) => {
   return (
     <>
         <div className=' bg-white dark:bg-gray-900 flex justify-between items-center shadow-sm p-4 sm:px-10 md:px-12  lg:px-16'>
-        <Link href={'/dashboard'}><Logo /></Link>
+        <Link href={'/dashboard'}><Logo size="md" /></Link>
           <div className="flex items-center gap-4">
             <OrganizationSwitcher />
             <ThemeToggle />
