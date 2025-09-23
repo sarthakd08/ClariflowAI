@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { doc, setDoc } from 'firebase/firestore'
 import { db } from '@/config/firebaseConfig'
 import { ThemeToggle } from '@/components/theme-toggle'
+import ModeIndicator from '@/components/mode-indicator'
 
 type Props = {}
 
@@ -41,7 +42,7 @@ const Header = (props: Props) => {
         <div className=' bg-white dark:bg-gray-900 flex justify-between items-center shadow-sm p-4 sm:px-10 md:px-12  lg:px-16'>
         <Link href={'/dashboard'}><Logo size="md" /></Link>
           <div className="flex items-center gap-4">
-            <OrganizationSwitcher />
+            <ModeIndicator />
             <ThemeToggle />
             <UserButton />
           </div>
