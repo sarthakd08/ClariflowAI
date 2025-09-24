@@ -1,7 +1,6 @@
 "use client"
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import dynamic from 'next/dynamic';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '@/config/firebaseConfig';
 import { useUser } from '@clerk/nextjs';
@@ -11,9 +10,6 @@ import { Button } from '@/components/ui/button';
 import { MessageCircle, X } from 'lucide-react';
 import { useStorage, useMutation } from '@liveblocks/react/suspense';
 import { LiveObject } from '@liveblocks/client';
-
-// Dynamically import EditorJS to avoid SSR issues
-const EditorJS = dynamic(() => import('@editorjs/editorjs'), { ssr: false });
 
 type Props = {
     documentInfo: Doc
@@ -140,7 +136,7 @@ const RealTimeDocumentEditor = ({documentInfo}: Props) => {
       } catch (error) {
         console.error('Error updating document:', error);
       }
-    }).catch((error) => {
+    }).catch((error: any) => {
       console.error('Error saving editor data:', error);
     });
   }, [updateDocumentContent, user]);
@@ -194,18 +190,7 @@ const RealTimeDocumentEditor = ({documentInfo}: Props) => {
             delimiter: DelimiterTool,
             paragraph: ParagraphTool,
             table: TableTool,
-            list: {
-              class: ListTool,
-              inlineToolbar: true,
-              shortcut: 'CMD+SHIFT+L',
-              config: {
-                defaultStyle: 'unordered',
-              },
-              conversionConfig: {
-                import: 'text',
-                export: 'text',
-              },
-            },
+            list: ListTool,
             code: {
               class: CodeToolImport,
               shortcut: 'CMD+SHIFT+P',

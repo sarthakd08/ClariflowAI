@@ -59,7 +59,12 @@ export function Room({ children }: { children: ReactNode }) {
             }
         }}
     >
-      <RoomProvider id={id}>
+      <RoomProvider 
+        id={id}
+        initialStorage={{
+          documentContent: {}
+        }}
+      >
         <ClientSideSuspense fallback={<div>Loading Comments…</div>}>
           {children}
         </ClientSideSuspense>

@@ -1,19 +1,7 @@
 "use client"
 
 import React, { useEffect, useRef, useState } from 'react';
-import dynamic from 'next/dynamic';
-
-// Dynamically import EditorJS to avoid SSR issues
-const EditorJS = dynamic(() => import('@editorjs/editorjs'), { ssr: false });
-// Dynamically import EditorJS tools to avoid SSR issues
-const Header = dynamic(() => import('@editorjs/header'), { ssr: false });
-const Delimiter = dynamic(() => import('@editorjs/delimiter'), { ssr: false });
-const List = dynamic(() => import('@editorjs/list'), { ssr: false });
-const Checklist = dynamic(() => import('@editorjs/checklist'), { ssr: false });
-const Table = dynamic(() => import('@editorjs/table'), { ssr: false });
-const CodeTool = dynamic(() => import('@editorjs/code'), { ssr: false });
-const Paragraph = dynamic(() => import('@editorjs/paragraph'), { ssr: false });
-import { BlockTool } from '@editorjs/editorjs';
+import EditorJS, { BlockTool } from '@editorjs/editorjs';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '@/config/firebaseConfig';
 import { useUser } from '@clerk/nextjs';
@@ -144,18 +132,7 @@ const saveDocument = () => {
           delimiter: DelimiterTool,
           paragraph: ParagraphTool,
           table: TableTool,
-          list: {
-            class: ListTool,
-            inlineToolbar: true,
-            shortcut: 'CMD+SHIFT+L',
-            config: {
-              defaultStyle: 'unordered',
-            },
-            conversionConfig: {
-              import: 'text',
-              export: 'text',
-            },
-          },
+          list: ListTool,
           code: {
             class: CodeToolImport,
             shortcut: 'CMD+SHIFT+P',
