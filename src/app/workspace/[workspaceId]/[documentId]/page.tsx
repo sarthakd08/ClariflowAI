@@ -39,7 +39,9 @@ const WorkspaceDocumentDetails = ({ params }: Props) => {
 
         {/* Main Content */}
         <div className="flex-1 overflow-auto md:ml-72">
-          <DocumentEditorSection params={params} />
+          <Room>
+            <DocumentEditorSection params={params} />
+          </Room>
         </div>
       </div>
   );

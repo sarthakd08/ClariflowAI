@@ -160,9 +160,9 @@ useEffect(() => {
       <div className="flex justify-between mt-8 mb-8 px-6 md:mt-6">
         <h2 className="font-semibold text-primary dark:text-orange-400 mt-1 text-sm md:text-lg">{workspaceName}</h2>
         <CreateDocDialogue onCreateDocument={onCreateNewDocument}>
-          <Button size="sm" variant={'default'}>
+          <div className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-8 px-3 cursor-pointer">
             <Plus className="w-4 h-4"/>
-          </Button>
+          </div>
         </CreateDocDialogue>
       </div>
 

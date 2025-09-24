@@ -48,9 +48,15 @@ const DocumentInfo = ({documentInfo}: Props) => {
                 <div className='relative group cursor-pointer bg-slate-400'>
                     <h2 className='absolute w-full h-full flex items-center justify-center text-beige font-bold text-white group-hover:text-black'>Change Cover</h2>
                     <div className='group-hover:opacity-40'>
-                        <Image src={workspaceCoverImage} alt='' width={400} height={400} 
-                            className='w-full h-[250px] object-cover rounded-t-xl'
-                        />
+                        {workspaceCoverImage ? (
+                            <Image src={workspaceCoverImage} alt='Document cover' width={400} height={400} 
+                                className='w-full h-[250px] object-cover rounded-t-xl'
+                            />
+                        ) : (
+                            <div className='w-full h-[250px] bg-gradient-to-br from-slate-400 to-slate-600 rounded-t-xl flex items-center justify-center'>
+                                <span className='text-white text-lg font-medium opacity-60'>Click to add cover</span>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

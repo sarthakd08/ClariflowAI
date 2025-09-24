@@ -1,14 +1,18 @@
 "use client"
 
 import React, { useEffect, useRef, useState } from 'react';
-import EditorJS from '@editorjs/editorjs';
-import Header from '@editorjs/header';
-import Delimiter from '@editorjs/delimiter';
-import List from "@editorjs/list";
-import Checklist from '@editorjs/checklist';
-import Table from '@editorjs/table';
-import CodeTool from '@editorjs/code';
-import Paragraph from '@editorjs/paragraph';
+import dynamic from 'next/dynamic';
+
+// Dynamically import EditorJS to avoid SSR issues
+const EditorJS = dynamic(() => import('@editorjs/editorjs'), { ssr: false });
+// Dynamically import EditorJS tools to avoid SSR issues
+const Header = dynamic(() => import('@editorjs/header'), { ssr: false });
+const Delimiter = dynamic(() => import('@editorjs/delimiter'), { ssr: false });
+const List = dynamic(() => import('@editorjs/list'), { ssr: false });
+const Checklist = dynamic(() => import('@editorjs/checklist'), { ssr: false });
+const Table = dynamic(() => import('@editorjs/table'), { ssr: false });
+const CodeTool = dynamic(() => import('@editorjs/code'), { ssr: false });
+const Paragraph = dynamic(() => import('@editorjs/paragraph'), { ssr: false });
 import { BlockTool } from '@editorjs/editorjs';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '@/config/firebaseConfig';
@@ -108,9 +112,18 @@ const saveDocument = () => {
   };
 
 
-  const initEditor = () => {
-    if (!ref.current) {
-      ref.current = new EditorJS({
+  const initEditor = async () => {
+    if (!ref.current && typeof window !== 'undefined') {
+      // Ensure we're in the browser environment
+      const EditorJSClass = (await import('@editorjs/editorjs')).default;
+      const HeaderTool = (await import('@editorjs/header')).default;
+      const DelimiterTool = (await import('@editorjs/delimiter')).default;
+      const ListTool = (await import('@editorjs/list')).default;
+      const TableTool = (await import('@editorjs/table')).default;
+      const CodeToolImport = (await import('@editorjs/code')).default;
+      const ParagraphTool = (await import('@editorjs/paragraph')).default;
+      
+      ref.current = new EditorJSClass({
         holder: 'editorjs',
         onChange: (api, event) => {
             console.log('Content changed:', event, 'Document Info:', docDetailsRef.current);
@@ -127,12 +140,12 @@ const saveDocument = () => {
           getDocumentDetails();
         },
         tools: {
-          header: Header,
-          delimiter: Delimiter,
-          paragraph: Paragraph,
-          table: Table,
+          header: HeaderTool,
+          delimiter: DelimiterTool,
+          paragraph: ParagraphTool,
+          table: TableTool,
           list: {
-            class: List as unknown as EditorJS.ToolConstructable, // Adjusted casting to ToolConstructable
+            class: ListTool,
             inlineToolbar: true,
             shortcut: 'CMD+SHIFT+L',
             config: {
@@ -143,9 +156,8 @@ const saveDocument = () => {
               export: 'text',
             },
           },
-        //   checklist: Checklist, // Declared in .d.ts file
           code: {
-            class: CodeTool,
+            class: CodeToolImport,
             shortcut: 'CMD+SHIFT+P',
           },
         },

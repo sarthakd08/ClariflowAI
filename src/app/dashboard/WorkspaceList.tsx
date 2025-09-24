@@ -30,10 +30,16 @@ const WorkspaceList = ({workspaceList}: Props) => {
         hover:scale-105 transition-all cursor-pointer'
         onClick={()=>OnClickWorkspaceItem(workspace)}
         >
-            <Image src={workspace?.workspaceCoverImage} 
-            width={400} height={200} alt='cover'
-            className='h-[150px] object-cover rounded-t-xl'
-            />
+            {workspace?.workspaceCoverImage ? (
+                <Image src={workspace.workspaceCoverImage} 
+                width={400} height={200} alt='cover'
+                className='h-[150px] object-cover rounded-t-xl'
+                />
+            ) : (
+                <div className='h-[150px] bg-gradient-to-br from-slate-400 to-slate-600 rounded-t-xl flex items-center justify-center'>
+                    <span className='text-white text-lg font-medium opacity-60'>No Cover</span>
+                </div>
+            )}
             <div className='p-4 rounded-b-xl'>
                 <h2 className='flex gap-2'>{workspace?.emoji} {workspace.workspaceName}</h2>
             </div>
